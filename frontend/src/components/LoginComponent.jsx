@@ -1,6 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+import { login } from "../services/UserService"
+import { useNavigate } from "react-router-dom"
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const LoginComponent = () => {
+
+  const navigator = useNavigate()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -16,7 +22,21 @@ const LoginComponent = () => {
     console.log(email, password)
     
     if (validateForm()) {
-      // proceed with code
+      const loginCredentials = { email, password };
+      login(loginCredentials)
+        .then((response) => {
+          console.log(response.data) 
+          if (response.data == "Login successful.") {
+            navigator("/")
+            toast.success('Successfully logged in')
+          }
+        })
+        .catch((error) => {
+          console.log("Login failed: ", error)
+          if (error.response.status == 401) {
+            toast.error("Invalid credentials")
+          }
+        })
     }
   }
 
@@ -97,7 +117,7 @@ const LoginComponent = () => {
             className="btn btn-primary mb-4" 
             onClick={loginUser}
           >
-            Sign in
+            Log in
           </button>
         </div>
 

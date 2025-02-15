@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,16 +22,11 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
     @Override
     public UserDto createUser(UserDto userDto) {
-        try {
-            String hashedPassword = passwordEncoder.encode(userDto.getPassword());
-            User user = UserMapper.mapToUser(userDto);
-            user.setPassword(hashedPassword);
-            User savedUser = userRepository.save(user);
-            return UserMapper.mapToUserDto(savedUser);
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating user: " + e.getMessage(), e);
-        }
-
+        String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+        User user = UserMapper.mapToUser(userDto);
+        user.setPassword(hashedPassword);
+        User savedUser = userRepository.save(user);
+        return UserMapper.mapToUserDto(savedUser);
     }
 
     @Override
@@ -84,10 +80,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean authenticateUser(String email, String password) {
-        User user = userRepository.getUserByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User with given Email does not exist: " + email));
+        Optional<User> user = userRepository.getUserByEmail(email);
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (user.isEmpty()) {
+            return false;
+        }
+
+        if (passwordEncoder.matches(password, user.get().getPassword())) {
             return true;
         } else {
             return false;

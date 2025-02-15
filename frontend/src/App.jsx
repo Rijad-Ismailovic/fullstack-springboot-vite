@@ -7,11 +7,13 @@ import FooterComponent from "./components/FooterComponent";
 import VehicleListingComponent from "./components/VehicleListingComponent";
 import ProfileHeaderComponent from "./components/ProfileHeaderComponent";
 import LoginComponent from "./components/LoginComponent";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       <BrowserRouter>
+        <Toaster/>
         <NavbarComponent></NavbarComponent>
         <Routes>
           {/* http://localhost:3000/api/vehicles/ */}

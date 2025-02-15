@@ -49,7 +49,7 @@ public class UserController {
         return ResponseEntity.ok("User with given ID deleted succesfully: " + userId);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto loginRequestDto){
         boolean isAuthenticated = userService.authenticateUser(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
