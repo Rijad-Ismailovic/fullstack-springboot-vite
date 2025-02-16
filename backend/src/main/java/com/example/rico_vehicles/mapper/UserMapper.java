@@ -10,7 +10,8 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPassword(),
                 user.getFirstName(),
-                user.getLastName()
+                user.getLastName(),
+                user.getImagePath()
         );
     }
 
@@ -20,7 +21,8 @@ public class UserMapper {
                 userDto.getEmail(),
                 userDto.getPassword(),
                 userDto.getFirstName(),
-                userDto.getLastName()
+                userDto.getLastName(),
+                userDto.getImagePath()
         );
     }
 }

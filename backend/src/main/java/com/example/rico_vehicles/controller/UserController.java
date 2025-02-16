@@ -2,16 +2,23 @@ package com.example.rico_vehicles.controller;
 
 import com.example.rico_vehicles.dto.LoginRequestDto;
 import com.example.rico_vehicles.dto.UserDto;
+import com.example.rico_vehicles.service.FileService;
 import com.example.rico_vehicles.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -22,9 +29,18 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
-        UserDto saveUser = userService.createUser(userDto);
-        return new ResponseEntity<>(saveUser, HttpStatus.CREATED);
+    public ResponseEntity<?> createUser(@RequestPart("userDto") UserDto userDto, @RequestPart(value = "imageFile", required = false) MultipartFile image){
+        try {
+            if(image != null){
+                String imagePath = FileService.uploadFile(image, "uploads/profile_pictures/");
+                userDto.setImagePath(imagePath);
+            }
+
+            UserDto savedUser = userService.createUser(userDto);
+            return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error saving user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("{id}")

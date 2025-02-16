@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import ReCAPTCHA from "react-google-recaptcha"
+import { registration } from '../services/UserService'
+import toast, { Toaster } from 'react-hot-toast';
 
 const RegistrationComponent = () => {
 
@@ -12,6 +14,7 @@ const RegistrationComponent = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [repeatPassword, setRepeatPassword] = useState("")
+  const [file, setFile] = useState(null)
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -21,8 +24,9 @@ const RegistrationComponent = () => {
   })
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  function handleFileChange(e) {
+  function handleImageChange(e) {
     if (e.target.files) {
+       // TODO Check if file is actually an image
       setFile(e.target.files[0])
     }
   }
@@ -31,7 +35,15 @@ const RegistrationComponent = () => {
     e.preventDefault()
 
     if (validateForm()) {
-      console.log("validated!")
+      const registrationInput = { firstName, lastName, email, password, file }
+      registration(registrationInput)
+        .then((response) => {
+          toast.success("Succesfully registered.")
+          navigator("/login")
+        })
+        .catch((error) =>  {
+          console.error("Registration failed:", error.response.data || error.message)
+        })
     }
 
     function validateForm() {
@@ -92,7 +104,7 @@ const RegistrationComponent = () => {
               id="firstName" 
                 name="firstName" 
                 placeholder="First name"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`} 
+              className={`form-control ${errors.firstName ? "is-invalid" : ""}`} 
               onChange={(e) => setFirstName(e.target.value)} 
             />
               {/* <label className="form-label">Email address</label> */}
@@ -104,7 +116,7 @@ const RegistrationComponent = () => {
               id="lastName" 
               name="lastName" 
               placeholder="Last name"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`} 
+              className={`form-control ${errors.lastName ? "is-invalid" : ""}`} 
               onChange={(e) => setLastName(e.target.value)} 
             />
               {/* <label className="form-label">Email address</label> */}
@@ -142,7 +154,7 @@ const RegistrationComponent = () => {
           {/* Repeat password input */}
           <div data-mdb-input-init className="form-outline mb-4">
             <input 
-              type="repeatPassword" 
+              type="password" 
               id="repeatPassword" 
                 name="repeatPassword" 
                 placeholder="Repeat password"
@@ -160,7 +172,7 @@ const RegistrationComponent = () => {
               type="file"
               id="profilePicture"
               name="profilePicture"
-              
+              onChange={handleImageChange}
             >
             </input>
             <br></br>
@@ -182,7 +194,7 @@ const RegistrationComponent = () => {
               onClick={registerUser}
               disabled={!captchaValue}
             >
-              Log in
+              Register
             </button>
           </div>
 
