@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -50,13 +52,18 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody LoginRequestDto loginRequestDto){
+        Map<String, Object> response = new HashMap<>();
         boolean isAuthenticated = userService.authenticateUser(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
         if(isAuthenticated){
-            return ResponseEntity.ok("Login successful.");
+            Long userId = userService.getUserByEmail(loginRequestDto.getEmail()).getId();
+            response.put("message", "Login successful");
+            response.put("userId", userId);
+            return ResponseEntity.ok(response);
         }else{
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            response.put("message", "Invalid email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 }

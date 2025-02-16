@@ -8,6 +8,7 @@ import VehicleListingComponent from "./components/VehicleListingComponent";
 import ProfileHeaderComponent from "./components/ProfileHeaderComponent";
 import LoginComponent from "./components/LoginComponent";
 import { Toaster } from "react-hot-toast";
+import RegistrationComponent from "./components/RegistrationComponent";
 
 function App() {
   return (
@@ -44,7 +45,12 @@ function App() {
             path="/login"
             element={<LoginComponent></LoginComponent>}>
           </Route>
-          
+
+          {/* http://localhost:3000/api/registration */}
+          <Route
+            path="/registration"
+            element={<RegistrationComponent></RegistrationComponent>}>
+            </Route>
         </Routes>
         <FooterComponent></FooterComponent>
       </BrowserRouter>

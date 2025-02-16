@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"
 
-const NavbarComponent = () => {
+const NavbarComponent = () =>  {
+
+  const navigator = useNavigate()
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container px-4 px-lg-5">
@@ -26,41 +30,14 @@ const NavbarComponent = () => {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#!">
-                About
-              </a>
+              <button className="nav-link" onClick={() => navigator(`/profile/${localStorage.getItem("userId")}`)}>
+                Profile
+              </button>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                id="navbarDropdown"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Shop
+            <li className="nav-item">
+              <a className="nav-link" href="#!">
+                Admin
               </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a className="dropdown-item" href="#!">
-                    All Products
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#!">
-                    Popular Items
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#!">
-                    New Arrivals
-                  </a>
-                </li>
-              </ul>
             </li>
           </ul>
           <form className="d-flex">

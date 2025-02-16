@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 const LoginComponent = () => {
 
   const navigator = useNavigate()
+  const localStorage = window.localStorage;
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -19,14 +20,14 @@ const LoginComponent = () => {
 
   function loginUser(e) {
     e.preventDefault()
-    console.log(email, password)
     
     if (validateForm()) {
       const loginCredentials = { email, password };
       login(loginCredentials)
         .then((response) => {
-          console.log(response.data) 
-          if (response.data == "Login successful.") {
+          console.log(response.data.message) 
+          if (response.data.message == "Login successful") {
+            localStorage.setItem("userId", response.data.userId)
             navigator("/")
             toast.success('Successfully logged in')
           }
@@ -124,7 +125,7 @@ const LoginComponent = () => {
         {/* Register link */}
         <div className="text-center">
           <p>
-            Don't have an account? <a href="#!">Register</a>
+            Don't have an account?<button className="btn btn-link" onClick={() => navigator("/registration", { replace: true })}>Register</button>
           </p>
         </div>
       </form>
