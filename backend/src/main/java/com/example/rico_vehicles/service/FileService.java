@@ -16,11 +16,12 @@ public class FileService {
 
         // Generate unique file name
         String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir + fileName);
+        Path filePath = Paths.get(uploadDir, fileName);
 
         // Save file locally
         Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        return filePath.toString(); // Return the file path
+        // Store relative path instead of absolute path
+        return "uploads/profile_pictures/" + fileName;
     }
 }

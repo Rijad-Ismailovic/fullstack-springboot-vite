@@ -118,7 +118,7 @@ const LoginComponent = () => {
             className="btn btn-primary mb-4" 
             onClick={loginUser}
           >
-            Log in
+              Log in
           </button>
         </div>
 

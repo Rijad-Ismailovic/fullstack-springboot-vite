@@ -1,9 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const NavbarComponent = () =>  {
 
   const navigator = useNavigate()
+  const location = useLocation();
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,12 +28,18 @@ const NavbarComponent = () =>  {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#!">
-                Home
+              <a className="nav-link active" aria-current="page" href="#!" onClick={() => {navigator("/")}}>
+                Homepage
               </a>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={() => navigator(`/profile/${localStorage.getItem("userId")}`)}>
+              <button className="nav-link" onClick={() => {
+                if (localStorage.getItem("userId") != null) {
+                  navigator(`/profile/${localStorage.getItem("userId")}`)
+                } else {
+                  navigator("/login")
+                }
+              }}>
                 Profile
               </button>
             </li>
@@ -41,10 +50,17 @@ const NavbarComponent = () =>  {
             </li>
           </ul>
           <form className="d-flex">
-            <button className="btn btn-outline-dark" type="submit">
-              <i className="bi-cart-fill me-1"></i>
-              Cart
-              <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <button className="btn btn-outline-dark" type="submit" onClick={() => {
+              if (localStorage.getItem("userId") == null) {
+                navigator("/login")
+              } else {
+                localStorage.removeItem("userId")
+                if(location.pathname.startsWith("/profile/")){
+                  navigator("/")
+                }
+              }
+            }}>
+              {localStorage.getItem("userId") == null ? "Log in" : "Log out "}
             </button>
           </form>
         </div>

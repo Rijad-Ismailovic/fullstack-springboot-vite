@@ -79,7 +79,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getUserByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with given Email does not exist: " + email));
         return UserMapper.mapToUserDto(user);
-
     }
 
     @Override
@@ -96,4 +95,17 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public boolean doesUserWithEmailExist(String email) {
+        Optional<User> user = userRepository.getUserByEmail(email);
+        if(user.isPresent()){
+            System.out.println("user is found: "+user);
+        } else {
+            System.out.println("user is not found: "+user);
+        }
+        return user.isPresent();
+    }
+
+
 }

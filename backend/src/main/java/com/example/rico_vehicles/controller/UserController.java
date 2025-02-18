@@ -15,12 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -81,5 +78,10 @@ public class UserController {
             response.put("message", "Invalid email or password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
+    }
+
+    @PostMapping("/emailCheck")
+    public ResponseEntity<Boolean> doesUserWithEmailExist(@RequestBody String email){
+        return ResponseEntity.ok(userService.doesUserWithEmailExist(email));
     }
 }

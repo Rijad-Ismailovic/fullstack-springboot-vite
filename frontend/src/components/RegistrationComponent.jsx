@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import ReCAPTCHA from "react-google-recaptcha"
-import { registration } from '../services/UserService'
+import { doesUserWithEmailExist, registration } from '../services/UserService'
 import toast, { Toaster } from 'react-hot-toast';
 
 const RegistrationComponent = () => {
@@ -65,7 +65,12 @@ const RegistrationComponent = () => {
       }
 
       if (emailRegex.test(email)) {
-        errorsCopy.email = ""
+        if (!doesUserWithEmailExist) {
+          errorsCopy.email=""
+        } else {
+          errorsCopy.email = "Email already registered"
+          valid = false
+        }
       } else {
         errorsCopy.email = "Not a valid email"
         valid = false
@@ -89,8 +94,6 @@ const RegistrationComponent = () => {
       return valid;
     }
   }
-
-
 
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center">
@@ -172,18 +175,23 @@ const RegistrationComponent = () => {
               type="file"
               id="profilePicture"
               name="profilePicture"
+              accept='image/png, image/jpg, image/jpeg'
               onChange={handleImageChange}
             >
             </input>
             <br></br>
             <small className="form-text text-muted">Please upload an image for your profile picture.</small>
-        </div>
-            
-          <ReCAPTCHA
+          </div>
+           
+          
+          <div className="d-flex justify-content-center mt-4">
+            <ReCAPTCHA
             sitekey="6LdF7NgqAAAAAJIQvn7YcQKwde_fB1e9aiGoq7xm"
-            onChange={(val) => setCaptchaValue(val)}
-          ></ReCAPTCHA>
-
+             onChange={(val) => setCaptchaValue(val)}
+            />
+          </div>
+          
+          
           {/* Submit button */}
           <div className="text-center mt-4">
             <button 
@@ -198,10 +206,10 @@ const RegistrationComponent = () => {
             </button>
           </div>
 
-          {/* Register link */}
+          {/* Login link */}
           <div className="text-center">
             <p>
-              Don't have an account? <button className="btn btn-link" onClick={() => navigator("/login", { state: true })}>Log in</button>
+              Already have an account?<button className="btn btn-link" onClick={() => navigator("/login", { state: true })}>Log in</button>
             </p>
           </div>
         </form>
