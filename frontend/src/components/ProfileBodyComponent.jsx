@@ -1,19 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate} from "react-router-dom"
+import { getVehiclesByUserId } from "../services/VehicleService";
 
 const ProfileBodyComponent = () => {
   const { id } = useParams();
-
+  const navigator = useNavigate();
   const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
-    getVehiclesById(id)
-      .then((response) => {
-        setVehicles(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id]);
+      getVehicles(id);
+    }, []);
+  
+  function getVehicles(id) {      
+    getVehiclesByUserId(id)
+        .then((response) => {
+          setVehicles(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  
+    function enterVehicleListing(id) {
+      navigator(`/vehicle-listing/${id}`);
+    }
 
   return (
     <section className="py-5">

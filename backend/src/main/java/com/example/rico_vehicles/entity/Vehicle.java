@@ -29,5 +29,7 @@ public class Vehicle {
     @Column(name = "year_of_manufacture")
     private int yearOfManufacture;
 
-    // TODO dodaj sve ostale specifikacije
+    @ManyToOne
+    @JoinColumn(name = "fk_user_id")
+    private User user;
 }

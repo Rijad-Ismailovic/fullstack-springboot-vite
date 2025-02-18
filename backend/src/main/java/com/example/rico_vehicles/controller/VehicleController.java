@@ -1,6 +1,7 @@
 package com.example.rico_vehicles.controller;
 
 import com.example.rico_vehicles.dto.VehicleDto;
+import com.example.rico_vehicles.entity.User;
 import com.example.rico_vehicles.service.VehicleService;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.Response;
@@ -45,6 +46,12 @@ public class VehicleController {
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteVehicle(@PathVariable("id") Long vehicleId){
         vehicleService.deleteVehicle(vehicleId);
-        return ResponseEntity.ok("Employee with given ID deleted succesfully: " + vehicleId);
+        return ResponseEntity.ok("Vehicle with given ID deleted succesfully: " + vehicleId);
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<List<VehicleDto>> getVehiclesByUser(@PathVariable("id") Long userId){
+        List<VehicleDto> vehicles = vehicleService.getVehiclesByUser(userId);
+        return ResponseEntity.ok(vehicles);
     }
 }

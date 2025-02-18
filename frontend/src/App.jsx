@@ -9,6 +9,7 @@ import ProfileHeaderComponent from "./components/ProfileHeaderComponent";
 import LoginComponent from "./components/LoginComponent";
 import { Toaster } from "react-hot-toast";
 import RegistrationComponent from "./components/RegistrationComponent";
+import ProfileBodyComponent from "./components/ProfileBodyComponent";
 
 function App() {
   return (
@@ -37,7 +38,12 @@ function App() {
           {/* http://localhost:3000/api/vehicles/profile/id */}
           <Route
             path="/profile/:id"
-            element={<ProfileHeaderComponent></ProfileHeaderComponent>}
+            element={
+              <>
+                <ProfileHeaderComponent></ProfileHeaderComponent>
+                <ProfileBodyComponent></ProfileBodyComponent>
+              </>
+            }
           ></Route>
 
           {/* http://localhost:3000/api/login */}
