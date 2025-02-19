@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(hashedPassword);
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
+        user.setImagePath(updatedUser.getImagePath());
 
         User updatedUserObj = userRepository.save(user);
 
@@ -84,7 +85,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean authenticateUser(String email, String password) {
         Optional<User> user = userRepository.getUserByEmail(email);
-
         if (user.isEmpty()) {
             return false;
         }
@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean doesUserWithEmailExist(String email) {
+        System.out.println(email);
         Optional<User> user = userRepository.getUserByEmail(email);
         if(user.isPresent()){
             System.out.println("user is found: "+user);

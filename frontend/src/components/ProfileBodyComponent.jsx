@@ -52,7 +52,7 @@ const ProfileBodyComponent = () => {
                         vehicle.yearOfManufacture}
                     </p>
                     {/*<!-- Product price-->*/}
-                    $40.00 - $80.00
+                    10 000 KM
                   </div>
                 </div>
                 {/*<!-- Product actions-->*/}
@@ -62,7 +62,7 @@ const ProfileBodyComponent = () => {
                       className="btn btn-outline-dark mt-auto"
                       onClick={() => enterVehicleListing(vehicle.id)}
                     >
-                      View options
+                      View Listing
                     </button>
                   </div>
                 </div>

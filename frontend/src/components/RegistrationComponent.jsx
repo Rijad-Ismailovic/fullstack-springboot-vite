@@ -26,74 +26,97 @@ const RegistrationComponent = () => {
 
   function handleImageChange(e) {
     if (e.target.files) {
-       // TODO Check if file is actually an image
       setFile(e.target.files[0])
     }
   }
 
   function registerUser(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (validateForm()) {
-      const registrationInput = { firstName, lastName, email, password, file }
-      registration(registrationInput)
-        .then((response) => {
-          toast.success("Succesfully registered.")
-          navigator("/login")
-        })
-        .catch((error) =>  {
-          console.error("Registration failed:", error.response.data || error.message)
-        })
-    }
+    // Make validateForm async and await its result
+    validateForm().then((isValid) => {
+      if (isValid) {
+        console.log("Registration starts...");
+        const registrationInput = {
+          firstName,
+          lastName,
+          email,
+          password,
+          file,
+        };
+        registration(registrationInput)
+          .then((response) => {
+            toast.success("Successfully registered.");
+            navigator("/login");
+          })
+          .catch((error) => {
+            console.error(
+              "Registration failed:",
+              error.response.data || error.message
+            );
+          });
+      }
+    });
+  }
 
-    function validateForm() {
-      let valid = true
-      const errorsCopy = { ...errors }
-      
-      if (firstName != "") {
-        errorsCopy.firstName = ""
+  async function validateForm() {
+    let valid = true;
+    const errorsCopy = { ...errors };
+
+    // Check if the email exists asynchronously
+    try {
+      const response = await doesUserWithEmailExist(email);
+
+      if (firstName !== "") {
+        errorsCopy.firstName = "";
       } else {
-        errorsCopy.firstName = "First name is required"
-        valid = false
+        errorsCopy.firstName = "First name is required";
+        valid = false;
       }
 
-      if (lastName != "") {
-        errorsCopy.lastName = ""
+      if (lastName !== "") {
+        errorsCopy.lastName = "";
       } else {
-        errorsCopy.lastName = "Last name is required"
-        valid = false
+        errorsCopy.lastName = "Last name is required";
+        valid = false;
       }
 
       if (emailRegex.test(email)) {
-        if (!doesUserWithEmailExist) {
-          errorsCopy.email=""
+        if (response.data === false) {
+          errorsCopy.email = "";
         } else {
-          errorsCopy.email = "Email already registered"
-          valid = false
+          errorsCopy.email = "Email already registered";
+          valid = false;
         }
       } else {
-        errorsCopy.email = "Not a valid email"
-        valid = false
+        errorsCopy.email = "Not a valid email";
+        valid = false;
       }
 
-      if (password != "") {
-        errorsCopy.password = ""
+      if (password !== "") {
+        errorsCopy.password = "";
       } else {
-        errorsCopy.password = "Password is required"
-        valid = false
+        errorsCopy.password = "Password is required";
+        valid = false;
       }
 
-      if (repeatPassword == password) {
-        errorsCopy.repeatPassword = ""
+      if (repeatPassword === password) {
+        errorsCopy.repeatPassword = "";
       } else {
-        errorsCopy.repeatPassword = "Repeat password should be same as password"
-        valid = false
+        errorsCopy.repeatPassword =
+          "Repeat password should be same as password";
+        valid = false;
       }
 
-      setErrors(errorsCopy)
-      return valid;
+      setErrors(errorsCopy);
+    } catch (error) {
+      console.error("Error checking email:", error);
+      valid = false;
     }
+
+    return valid;
   }
+
 
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center">
