@@ -62,8 +62,7 @@ const RegistrationComponent = () => {
   async function validateForm() {
     let valid = true;
     const errorsCopy = { ...errors };
-
-    // Check if the email exists asynchronously
+    
     try {
       const response = await doesUserWithEmailExist(email);
 

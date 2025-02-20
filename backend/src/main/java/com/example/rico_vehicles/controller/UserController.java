@@ -48,7 +48,10 @@ public class UserController {
             if(image != null){
                 String imagePath = FileService.uploadFile(image, "uploads/profile_pictures/");
                 updatedUser.setImagePath(imagePath);
+            }else{
+                updatedUser.setImagePath("Do not change image");
             }
+            System.out.println(updatedUser.getImagePath());
 
             UserDto userDto = userService.updateUser(userId, updatedUser);
             return ResponseEntity.ok(userDto);
