@@ -30,7 +30,7 @@ const ProfileHeaderComponent = () => {
         <img
           className="img-fluid rounded-circle mb-4"
           src={
-            imagePath != null
+            imagePath != ""
               ? `http://localhost:8080/${imagePath}`
               : "https://dummyimage.com/150x150/6c757d/dee2e6.jpg"
           }

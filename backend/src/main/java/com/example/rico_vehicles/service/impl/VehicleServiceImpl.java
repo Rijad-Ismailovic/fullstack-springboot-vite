@@ -52,11 +52,17 @@ public class VehicleServiceImpl implements VehicleService {
         User user = userRepository.findById(updatedVehicle.getUserId())
                         .orElseThrow(() -> new ResourceNotFoundException("User with given ID does not exist: " + updatedVehicle.getUserId()));
 
+        vehicle.setUser(user);
         vehicle.setTitle(updatedVehicle.getTitle());
         vehicle.setManufacturer(updatedVehicle.getManufacturer());
         vehicle.setModel(updatedVehicle.getModel());
         vehicle.setYearOfManufacture(updatedVehicle.getYearOfManufacture());
-        vehicle.setUser(user);
+        vehicle.setEngineSize(updatedVehicle.getEngineSize());
+        vehicle.setFuelType(updatedVehicle.getFuelType());
+        vehicle.setKW(updatedVehicle.getKW());
+        vehicle.setDistanceTraveled(updatedVehicle.getDistanceTraveled());
+        vehicle.setCity(updatedVehicle.getCity());
+        vehicle.setPrice(updatedVehicle.getPrice());
 
         Vehicle updatedVehicleObj = vehicleRepository.save(vehicle);
 

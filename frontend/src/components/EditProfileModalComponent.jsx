@@ -14,7 +14,6 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 
-
 function EditProfileModal() {
   const [show, setShow] = useState(false);
 
@@ -31,8 +30,8 @@ function EditProfileModal() {
     firstName: "",
     lastName: "",
     oldPassword: "",
-    newPassword: ""
-  })
+    newPassword: "",
+  });
 
   const handleShow = () => {
     getUserById(localStorage.getItem("userId"))
@@ -92,18 +91,18 @@ function EditProfileModal() {
             toast.error("Error updating profile");
           }
         });
-    } 
+    }
   };
 
   function validate() {
-    let valid = true
+    let valid = true;
     const errorsCopy = { ...errors };
-    
+
     if (firstName != "") {
-      errorsCopy.firstName = ""
+      errorsCopy.firstName = "";
     } else {
       errorsCopy.firstName = "First name is required";
-      valid = false
+      valid = false;
     }
 
     if (lastName != "") {
@@ -120,7 +119,7 @@ function EditProfileModal() {
       valid = false;
     }
 
-    if (newPassword != "") {
+    if (newPassword == "") {
       errorsCopy.newPassword = "";
     } else {
       errorsCopy.newPassword = "Field is required";
@@ -128,8 +127,6 @@ function EditProfileModal() {
     }
 
     setErrors(errorsCopy);
-
-    console.log(valid)
     return valid;
   }
 
@@ -140,7 +137,7 @@ function EditProfileModal() {
         onClick={handleShow}
         className="p-2 mb-1 border-0 bg-transparent"
       >
-        <Icon.PencilFill className="p-0" color="darkgray" />
+        <Icon.PencilFill className="p-0" color="lightgray" />
       </Button>
 
       <Modal show={show} onHide={handleClose}>
