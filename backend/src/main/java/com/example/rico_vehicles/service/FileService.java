@@ -22,6 +22,6 @@ public class FileService {
         Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         // Store relative path instead of absolute path
-        return "uploads/profile_pictures/" + fileName;
+        return uploadDir + fileName;
     }
 }

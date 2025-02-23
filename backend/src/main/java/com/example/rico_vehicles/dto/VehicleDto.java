@@ -19,9 +19,10 @@ public class VehicleDto {
     private Integer yearOfManufacture;
     private Double engineSize;
     private String fuelType;
-    private Integer kW;
+    private Integer kw;
     private Integer distanceTraveled;
     private String city;
     private Double price;
     private String description;
+    private String imagePath;
 }

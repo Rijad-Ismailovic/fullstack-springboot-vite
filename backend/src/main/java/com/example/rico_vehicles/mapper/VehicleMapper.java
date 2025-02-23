@@ -21,7 +21,8 @@ public class VehicleMapper {
             vehicle.getDistanceTraveled(),
             vehicle.getCity(),
             vehicle.getPrice(),
-            vehicle.getDescription()
+            vehicle.getDescription(),
+            vehicle.getImagePath()
         );
     }
 
@@ -35,11 +36,12 @@ public class VehicleMapper {
                 vehicleDto.getYearOfManufacture(),
                 vehicleDto.getEngineSize(),
                 vehicleDto.getFuelType(),
-                vehicleDto.getKW(),
+                vehicleDto.getKw(),
                 vehicleDto.getDistanceTraveled(),
                 vehicleDto.getCity(),
                 vehicleDto.getPrice(),
-                vehicleDto.getDescription()
+                vehicleDto.getDescription(),
+                vehicleDto.getImagePath()
                 );
     }
 }

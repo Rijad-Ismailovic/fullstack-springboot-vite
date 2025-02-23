@@ -23,6 +23,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleDto createVehicle(VehicleDto vehicleDto) {
+
         User user = userRepository.findById(vehicleDto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Vehicle vehicle = VehicleMapper.mapToVehicle(vehicleDto, user);
@@ -59,7 +60,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setYearOfManufacture(updatedVehicle.getYearOfManufacture());
         vehicle.setEngineSize(updatedVehicle.getEngineSize());
         vehicle.setFuelType(updatedVehicle.getFuelType());
-        vehicle.setKW(updatedVehicle.getKW());
+        vehicle.setKW(updatedVehicle.getKw());
         vehicle.setDistanceTraveled(updatedVehicle.getDistanceTraveled());
         vehicle.setCity(updatedVehicle.getCity());
         vehicle.setPrice(updatedVehicle.getPrice());

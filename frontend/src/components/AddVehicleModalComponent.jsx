@@ -2,13 +2,17 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import Dropdown from "react-bootstrap/Dropdown";
+import { addVehicle } from "../services/VehicleService";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+
 
 function AddVehicleModal() {
   const [show, setShow] = useState(false);
+  const navigator = useNavigate()
 
   const [title, setTitle] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -136,116 +140,131 @@ function AddVehicleModal() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleAddListing = () => {
-      console.log({
-        title,
-        manufacturer,
-        model,
-        yearOfManufacture,
-        engineSize,
-        fuelType,
-        kw,
-        distanceTraveled,
-        city,
-        price,
-        description,
-        file,
-      });
-      console.log("Everything ok? :", validate());
-      console.log(errors)
-  }
-    
-
-    function validate() {
-        let isValid = true
-        let errorsCopy = { ...errors }
-        
-        if (title != "") {
-          errorsCopy.title = "";
-        } else {
-          errorsCopy.title = "Field is required";
-          isValid = false;
-        }
-
-        if (manufacturer != "") {
-          errorsCopy.manufacturer = "";
-        } else {
-          errorsCopy.manufacturer = "Field is required";
-          isValid = false;
-        }
-
-        if (model != "") {
-          errorsCopy.model = "";
-        } else {
-          errorsCopy.model = "Field is required";
-          isValid = false;
-        }
-
-        if (yearOfManufacture != "") {
-          errorsCopy.yearOfManufacture = "";
-        } else {
-          errorsCopy.yearOfManufacture = "Field is required";
-          isValid = false;
-        }
-
-        if (engineSize != "") {
-          errorsCopy.engineSize = "";
-        } else {
-          errorsCopy.engineSize = "Field is required";
-          isValid = false;
-        }
-
-        if (kw != "") {
-          errorsCopy.kw = "";
-        } else {
-          errorsCopy.kw = "Field is required";
-          isValid = false;
-        }
-
-        if (distanceTraveled != "") {
-          errorsCopy.distanceTraveled = "";
-        } else {
-          errorsCopy.distanceTraveled = "Field is required";
-          isValid = false;
-        }
-
-        if (fuelType != "") {
-          errorsCopy.fuelType = "";
-        } else {
-          errorsCopy.fuelType = "Field is required";
-          isValid = false;
-        }
-
-        if (city != "") {
-          errorsCopy.city = "";
-        } else {
-          errorsCopy.city = "Field is required";
-          isValid = false;
-        }
-
-        if (price != "") {
-          errorsCopy.price = "";
-        } else {
-          errorsCopy.price = "Field is required";
-          isValid = false;
-        }
-
-        if (description != "") {
-          errorsCopy.description = "";
-        } else {
-          errorsCopy.description = "Field is required";
-          isValid = false;
-        }
-
-        if (file != "") {
-          errorsCopy.file = "";
-        } else {
-          errorsCopy.file = "Field is required";
-          isValid = false;
-        }
-
-        setErrors(errorsCopy)
-        return isValid
+    if (validate()) {
+      addVehicle(
+        {
+          title,
+          manufacturer,
+          model,
+          yearOfManufacture,
+          engineSize,
+          fuelType,
+          kw,
+          distanceTraveled,
+          city,
+          price,
+          description,
+          file,
+        },
+        localStorage.getItem("userId")
+      )
+        .then((response) => {
+          setShow(false);
+          navigator("/temp-route");
+          setTimeout(
+            () => navigator(`/profile/${localStorage.getItem("userId")}`),
+            100
+          );
+          toast.success("Listing successfully added");
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Failed to add listing.");
+        });
     }
+  };
+
+  function validate() {
+    let isValid = true;
+    let errorsCopy = { ...errors };
+
+    if (title != "") {
+      errorsCopy.title = "";
+    } else {
+      errorsCopy.title = "Field is required";
+      isValid = false;
+    }
+
+    if (manufacturer != "") {
+      errorsCopy.manufacturer = "";
+    } else {
+      errorsCopy.manufacturer = "Field is required";
+      isValid = false;
+    }
+
+    if (model != "") {
+      errorsCopy.model = "";
+    } else {
+      errorsCopy.model = "Field is required";
+      isValid = false;
+    }
+
+    if (yearOfManufacture != "") {
+      errorsCopy.yearOfManufacture = "";
+    } else {
+      errorsCopy.yearOfManufacture = "Field is required";
+      isValid = false;
+    }
+
+    if (engineSize != "") {
+      errorsCopy.engineSize = "";
+    } else {
+      errorsCopy.engineSize = "Field is required";
+      isValid = false;
+    }
+
+    if (kw != "") {
+      errorsCopy.kw = "";
+    } else {
+      errorsCopy.kw = "Field is required";
+      isValid = false;
+    }
+
+    if (distanceTraveled != "") {
+      errorsCopy.distanceTraveled = "";
+    } else {
+      errorsCopy.distanceTraveled = "Field is required";
+      isValid = false;
+    }
+
+    if (fuelType != "") {
+      errorsCopy.fuelType = "";
+    } else {
+      errorsCopy.fuelType = "Field is required";
+      isValid = false;
+    }
+
+    if (city != "") {
+      errorsCopy.city = "";
+    } else {
+      errorsCopy.city = "Field is required";
+      isValid = false;
+    }
+
+    if (price != "") {
+      errorsCopy.price = "";
+    } else {
+      errorsCopy.price = "Field is required";
+      isValid = false;
+    }
+
+    if (description != "") {
+      errorsCopy.description = "";
+    } else {
+      errorsCopy.description = "Field is required";
+      isValid = false;
+    }
+
+    if (file) {
+      errorsCopy.file = "";
+    } else {
+      errorsCopy.file = "Field is required";
+      isValid = false;
+    }
+
+    setErrors(errorsCopy);
+    return isValid;
+  }
 
   return (
     <>
@@ -442,7 +461,7 @@ function AddVehicleModal() {
               <Form.Control
                 type="file"
                 accept="image/*"
-                onChange={(e) => setFile(e.target.value)}
+                onChange={(e) => setFile(e.target.files[0])}
                 className={errors.file ? "is-invalid" : ""}
               />
               <Form.Control.Feedback type="invalid">
