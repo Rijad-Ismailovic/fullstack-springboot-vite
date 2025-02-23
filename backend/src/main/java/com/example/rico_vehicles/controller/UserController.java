@@ -44,6 +44,7 @@ public class UserController {
 
     @PutMapping("{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long userId, @RequestPart("userDto") UserDto updatedUser, @RequestPart(value = "imageFile", required = false) MultipartFile image){
+        System.out.println(image);
         try {
             if(image != null){
                 String imagePath = FileService.uploadFile(image, "uploads/profile_pictures/");

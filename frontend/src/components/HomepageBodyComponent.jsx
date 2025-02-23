@@ -34,7 +34,11 @@ const HomepageBodyComponent = () => {
                 {/*<!-- Product image-->*/}
                 <img
                   className="card-img-top"
-                  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                  src={
+                    vehicle.imagePath != null
+                      ? `http://localhost:8080/${vehicle.imagePath}`
+                      : "https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                  }
                   alt="..."
                 />
                 {/*<!-- Product details-->*/}
@@ -51,7 +55,7 @@ const HomepageBodyComponent = () => {
                         vehicle.yearOfManufacture}
                     </p>
                     {/*<!-- Product price-->*/}
-                    $40.00 - $80.00
+                    {vehicle.price} KM 
                   </div>
                 </div>
                 {/*<!-- Product actions-->*/}

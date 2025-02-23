@@ -8,14 +8,31 @@ const VehicleListingComponent = () => {
   const [manufacturer, setManufacturer] = useState("");
   const [model, setModel] = useState("");
   const [yearOfManufacture, setYearOfManufacture] = useState("");
+  const [engineSize, setEngineSize] = useState("");
+  const [fuelType, setFuelType] = useState("");
+  const [kw, setKw] = useState("");
+  const [distanceTraveled, setDistanceTraveled] = useState("");
+  const [city, setCity] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState("");
 
   const { id } = useParams();
   useEffect(() => {
     getVehicleById(id).then((response) => {
+      console.log(response.data)
       setTitle(response.data.title);
       setManufacturer(response.data.manufacturer);
       setModel(response.data.model);
       setYearOfManufacture(response.data.yearOfManufacture);
+      setEngineSize(response.data.engineSize);
+      setFuelType(response.data.fuelType);
+      setKw(response.data.kw);
+      setDistanceTraveled(response.data.distanceTraveled);
+      setCity(response.data.city);
+      setPrice(response.data.price);
+      setDescription(response.data.description);
+      setFile(response.data.imagePath)
     });
   }, [id]);
 
@@ -25,8 +42,12 @@ const VehicleListingComponent = () => {
         <div className="row gx-4 gx-lg-5 align-items-center">
           <div className="col-md-6">
             <img
-              className="card-img-top mb-5 mb-md-0"
-              src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg"
+              className="card-img-top mb-5 mb-md-0 center-cropped"
+              src={
+                file
+                  ? `http://localhost:8080/${file}`
+                  : "https://dummyimage.com/600x700/dee2e6/6c757d.jpg"
+              }
               alt="..."
             />
           </div>
@@ -51,7 +72,7 @@ const VehicleListingComponent = () => {
                 id="inputQuantity"
                 type="num"
                 value="1"
-                style={{ "maxWidth": "3rem" }}
+                style={{ maxWidth: "3rem" }}
               />
               <button
                 className="btn btn-outline-dark flex-shrink-0"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -13,6 +13,8 @@ import {
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
+import Cropper from "react-cropper";
+
 
 function EditProfileModal() {
   const [show, setShow] = useState(false);
@@ -50,10 +52,27 @@ function EditProfileModal() {
   const handleClose = () => {
     setFirstName("");
     setLastName("");
-    setEmail("");
+    setOldPassword("");
+    setNewPassword("")
     setFile(null);
 
     setShow(false);
+  };
+
+  const cropperRef = useRef(null);
+  const [croppedFile, setCroppedFile] = useState("");
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const image = e.target.files[0];
+      setFileChanged(true);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        setFile(reader.result);
+      };
+
+      reader.readAsDataURL(image);
+    }
   };
 
   const handleSaveChanges = () => {
@@ -64,24 +83,43 @@ function EditProfileModal() {
             throw new Error("Authentication failed");
           }
 
-          const fileToSend = fileChanged ? file : null;
+          const cropper = cropperRef.current?.cropper;
+          if (cropper) {
+            const croppedCanvas = cropper.getCroppedCanvas();
+            croppedCanvas.toBlob((blob) => {
+              if (!blob) {
+                toast.error("Error processing image");
+                return;
+              }
 
-          return updateUserById(localStorage.getItem("userId"), {
-            firstName,
-            lastName,
-            email,
-            password: newPassword,
-            file: fileToSend,
-          });
-        })
-        .then(() => {
-          setShow(false);
-          navigator("/temp-route");
-          setTimeout(
-            () => navigator(`/profile/${localStorage.getItem("userId")}`),
-            100
-          );
-          toast.success("Profile successfully edited");
+              const file = new File([blob], "cropped-image.jpg", {
+                type: "image/jpeg",
+              });
+              const fileToSend = fileChanged ? file : null;
+
+              updateUserById(localStorage.getItem("userId"), {
+                firstName,
+                lastName,
+                email,
+                password: newPassword,
+                file: fileToSend,
+              })
+                .then(() => {
+                  setShow(false);
+                  navigator("/temp-route");
+                  setTimeout(
+                    () =>
+                      navigator(`/profile/${localStorage.getItem("userId")}`),
+                    100
+                  );
+                  toast.success("Profile successfully edited");
+                })
+                .catch((error) => {
+                  console.error(error);
+                  toast.error("Error updating profile");
+                });
+            });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -93,6 +131,7 @@ function EditProfileModal() {
         });
     }
   };
+
 
   function validate() {
     let valid = true;
@@ -119,7 +158,7 @@ function EditProfileModal() {
       valid = false;
     }
 
-    if (newPassword == "") {
+    if (newPassword != "") {
       errorsCopy.newPassword = "";
     } else {
       errorsCopy.newPassword = "Field is required";
@@ -140,7 +179,7 @@ function EditProfileModal() {
         <Icon.PencilFill className="p-0" color="lightgray" />
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
@@ -218,16 +257,28 @@ function EditProfileModal() {
                 <Form.Control
                   type="file"
                   accept="image/*"
-                  onChange={(e) => {
-                    setFile(e.target.files[0]);
-                    setFileChanged(true);
-                  }}
+                  onChange={handleImageChange}
                 />
                 <Form.Text className="text-muted">
                   Leaving this input empty will not change/remove profile
                   picture
                 </Form.Text>
               </Form.Group>
+              {file && (
+                <div
+                  className="position-relative overflow-hidden"
+                  style={{ height: "300px" }}
+                >
+                  <Cropper
+                    src={file}
+                    aspectRatio={1}
+                    guides={true}
+                    ref={cropperRef}
+                    viewMode={1}
+                    style={{ height: "100%", width: "100%" }}
+                  />
+                </div>
+              )}
             </Form>
           </Container>
         </Modal.Body>

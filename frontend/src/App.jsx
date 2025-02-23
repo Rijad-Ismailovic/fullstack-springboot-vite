@@ -10,6 +10,7 @@ import LoginComponent from "./components/LoginComponent";
 import { Toaster } from "react-hot-toast";
 import RegistrationComponent from "./components/RegistrationComponent";
 import ProfileBodyComponent from "./components/ProfileBodyComponent";
+import "cropperjs/dist/cropper.css"
 
 function App() {
   return (

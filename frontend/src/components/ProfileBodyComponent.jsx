@@ -77,7 +77,7 @@ const ProfileBodyComponent = () => {
                         vehicle.yearOfManufacture}
                     </p>
                     {/*<!-- Product price-->*/}
-                    10 000 KM
+                    {vehicle.price} KM 
                   </div>
                 </div>
                 {/*<!-- Product actions-->*/}

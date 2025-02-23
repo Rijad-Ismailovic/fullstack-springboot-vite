@@ -51,7 +51,8 @@ public class Vehicle {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
+    @Lob
     private String description;
 
     @Column(name = "image_path")

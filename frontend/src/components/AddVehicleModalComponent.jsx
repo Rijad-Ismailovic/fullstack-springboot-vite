@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -7,15 +7,25 @@ import Row from "react-bootstrap/Row";
 import { addVehicle } from "../services/VehicleService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
-
+import Cropper from "react-cropper";
 
 function AddVehicleModal() {
   const [show, setShow] = useState(false);
-  const navigator = useNavigate()
+  const navigator = useNavigate();
 
   const [title, setTitle] = useState("");
   const [manufacturer, setManufacturer] = useState("");
+  const [model, setModel] = useState("");
+  const [yearOfManufacture, setYearOfManufacture] = useState("");
+  const [engineSize, setEngineSize] = useState("");
+  const [fuelType, setFuelType] = useState("");
+  const [kw, setKw] = useState("");
+  const [distanceTraveled, setDistanceTraveled] = useState("");
+  const [city, setCity] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState("");
+
   const manufacturers = [
     "Audi",
     "BMW",
@@ -46,13 +56,6 @@ function AddVehicleModal() {
     "Volkswagen",
     "Volvo",
   ];
-  const [model, setModel] = useState("");
-  const [yearOfManufacture, setYearOfManufacture] = useState("");
-  const [engineSize, setEngineSize] = useState("");
-  const [fuelType, setFuelType] = useState("");
-  const [kw, setKw] = useState("");
-  const [distanceTraveled, setDistanceTraveled] = useState("");
-  const [city, setCity] = useState("");
   const cities = [
     "Banja Luka",
     "Bihać",
@@ -118,10 +121,6 @@ function AddVehicleModal() {
     "Zenica",
     "Zvornik",
   ];
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [file, setFile] = useState("");
-
   const [errors, setErrors] = useState({
     title: "",
     manufacturer: "",
@@ -137,42 +136,81 @@ function AddVehicleModal() {
     file: "",
   });
 
-  const handleClose = () => setShow(false);
+  const cropperRef = useRef(null);
+  const [croppedFile, setCroppedFile] = useState("");
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const image = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        setFile(reader.result);
+      };
+
+      reader.readAsDataURL(image);
+    }
+  };
+
+  const handleClose = () => {
+    setTitle("");
+    setManufacturer("");
+    setModel("");
+    setYearOfManufacture("");
+    setEngineSize("");
+    setFuelType("");
+    setKw("");
+    setDistanceTraveled("");
+    setCity("");
+    setPrice("");
+    setDescription("");
+    setFile("");
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
   const handleAddListing = () => {
     if (validate()) {
-      addVehicle(
-        {
-          title,
-          manufacturer,
-          model,
-          yearOfManufacture,
-          engineSize,
-          fuelType,
-          kw,
-          distanceTraveled,
-          city,
-          price,
-          description,
-          file,
-        },
-        localStorage.getItem("userId")
-      )
-        .then((response) => {
-          setShow(false);
-          navigator("/temp-route");
-          setTimeout(
-            () => navigator(`/profile/${localStorage.getItem("userId")}`),
-            100
-          );
-          toast.success("Listing successfully added");
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("Failed to add listing.");
-        });
+      const cropper = cropperRef.current?.cropper;
+      if (cropper) {
+        const croppedCanvas = cropper.getCroppedCanvas();
+        croppedCanvas.toBlob((blob) => {
+          const file = new File([blob], "cropped-image.jpg", {
+            type: "image/jpeg",
+          });
+
+          addVehicle(
+            {
+              title,
+              manufacturer,
+              model,
+              yearOfManufacture,
+              engineSize,
+              fuelType,
+              kw,
+              distanceTraveled,
+              city,
+              price,
+              description,
+              file,
+            },
+            localStorage.getItem("userId")
+          )
+            .then((response) => {
+              setShow(false);
+              navigator("/temp-route");
+              setTimeout(
+                () => navigator(`/profile/${localStorage.getItem("userId")}`),
+                100
+              );
+              toast.success("Listing successfully added");
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error("Failed to add listing.");
+            });
+        }, "image/jpeg"); // Specify the image format
+      }
     }
-  };
+  };  
 
   function validate() {
     let isValid = true;
@@ -275,7 +313,7 @@ function AddVehicleModal() {
         Add New Listing
       </button>
 
-      <Modal size="lg" show={show} onHide={handleClose}>
+      <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>Add Listing</Modal.Title>
         </Modal.Header>
@@ -461,13 +499,28 @@ function AddVehicleModal() {
               <Form.Control
                 type="file"
                 accept="image/*"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={handleImageChange} //onChange={(e) => setFile(e.target.files[0])}
                 className={errors.file ? "is-invalid" : ""}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.file}
               </Form.Control.Feedback>
             </Form.Group>
+            {file && (
+              <div
+                className="position-relative overflow-hidden"
+                style={{ height: "300px" }}
+              >
+                <Cropper
+                  src={file}
+                  aspectRatio={3 / 2}
+                  guides={true}
+                  ref={cropperRef}
+                  viewMode={1}
+                  style={{ height: "100%", width: "100%" }}
+                />
+              </div>
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>
