@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { getVehicleById } from "../services/VehicleService";
 import { useParams } from "react-router-dom";
 import { getUserById } from "../services/UserService";
+import { useNavigate, Link } from "react-router-dom"
 
 const VehicleListingComponent = () => {
+  const navigator = useNavigate()
+
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
+  const [userImage, setUserImage] = useState("")
   const [userId, setUserId] = useState("")
   const [title, setTitle] = useState("");
   const [manufacturer, setManufacturer] = useState("");
@@ -23,7 +27,6 @@ const VehicleListingComponent = () => {
   const { id } = useParams();
   useEffect(() => {
     getVehicleById(id).then((response) => {
-      console.log(response.data);
       setUserId(response.data.userId)
       setTitle(response.data.title);
       setManufacturer(response.data.manufacturer);
@@ -46,6 +49,7 @@ const VehicleListingComponent = () => {
         .then((response) => {
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
+          setUserImage(response.data.imagePath)
         })
         .catch((error) => {
           console.log(error);
@@ -69,12 +73,29 @@ const VehicleListingComponent = () => {
             />
           </div>
           <div className="col-md-6">
-            <div className="small mb-1">{firstName + " " + lastName}</div>
+            <div className="small mb-1">
+              <Link
+                to={`/profile/${userId}`}
+                className="text-decoration-none text-dark"
+              >
+                <img
+                  className="rounded-circle"
+                  style={{ width: "20px", height: "20px" }}
+                  src={
+                    file
+                      ? `http://localhost:8080/${userImage}`
+                      : "https://dummyimage.com/150x150/6c757d/dee2e6.jpg"
+                  }
+                  alt="..."
+                />
+                {" " + firstName + " " + lastName}
+              </Link>
+            </div>
             <h1 className="display-5 fw-bol der">{title}</h1>
             <div className="fs-5 mb-4 px-1">
-              <span className="fw-bold ">{price} KM</span>
+              <span className="fw-bold ">{price.toLocaleString()} KM</span>
             </div>
-            <div className="border rounded  p-3 m-2">
+            <div className="border rounded  p-3 m-1">
               <div className="row">
                 <div className="col">
                   <p>
@@ -112,40 +133,6 @@ const VehicleListingComponent = () => {
       </div>
     </section>
   );
-
-  {
-    /*return (
-    <section className="py-5">
-      <div className="container px-4 px-lg-5 my-5">
-        <div className="row gx-4 gx-lg-5 align-items-center">
-          <div className="col-md-6">
-            <img
-              className="card-img-top mb-5 mb-md-0 center-cropped"
-              src={
-                file
-                  ? `http://localhost:8080/${file}`
-                  : "https://dummyimage.com/600x700/dee2e6/6c757d.jpg"
-              }
-              alt="..."
-            />
-          </div>
-          <div className="col-md-6">
-            <div className="small mb-1">IME PREZIME</div>
-            <h1 className="display-5 fw-bol der">{title}</h1>
-            <div className="fs-5 mb-4">
-              <span>CIJENA KM</span>
-            </div>
-
-            <p className="lead">
-              DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION
-              DESCRIPTION DESCRIPTION DESCRIPTION DESCRIPTION
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );*/
-  }
 };
 
 export default VehicleListingComponent;

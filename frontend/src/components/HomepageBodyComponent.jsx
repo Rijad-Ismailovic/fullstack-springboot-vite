@@ -55,7 +55,7 @@ const HomepageBodyComponent = () => {
                         vehicle.yearOfManufacture}
                     </p>
                     {/*<!-- Product price-->*/}
-                    {vehicle.price} KM 
+                    {vehicle.price.toLocaleString()} KM
                   </div>
                 </div>
                 {/*<!-- Product actions-->*/}

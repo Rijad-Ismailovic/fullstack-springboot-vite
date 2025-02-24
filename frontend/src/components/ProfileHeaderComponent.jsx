@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { getUserById } from '../services/UserService'
-import EditProfileModal from "./EditProfileModalComponent";
-import * as Icon from "react-bootstrap-icons";
-
+import { getUserById } from "../services/UserService";
+import EditProfileModal from "./modals/EditProfileModalComponent";
+import { useParams } from "react-router-dom";
 
 const ProfileHeaderComponent = () => {
-
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [email, setEmail] = useState("")
-  const [imagePath, setImagePath] = useState("")
+  const { id } = useParams();
+  const [isMyProfile, setIsMyProfile] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [imagePath, setImagePath] = useState("");
 
   useEffect(() => {
-    getUserById(localStorage.getItem("userId"))
+    if (id == localStorage.getItem("userId")) {
+      setIsMyProfile(true);
+    }
+
+    getUserById(id)
       .then((response) => {
-        setFirstName(response.data.firstName)
-        setLastName(response.data.lastName)
-        setEmail(response.data.email)
-        setImagePath(response.data.imagePath)
+        setFirstName(response.data.firstName);
+        setLastName(response.data.lastName);
+        setEmail(response.data.email);
+        setImagePath(response.data.imagePath);
       })
       .catch((error) => {
-        console.log(error)
-      })
-  }, [])
+        console.log(error);
+      });
+  }, [id]);
 
   return (
     <header className="bg-dark py-1">
@@ -42,7 +46,8 @@ const ProfileHeaderComponent = () => {
         </h1>
 
         <p className="text-white-50 mb-0">
-          {email}<EditProfileModal />
+          {email}
+          {isMyProfile && <EditProfileModal />}
         </p>
       </div>
     </header>

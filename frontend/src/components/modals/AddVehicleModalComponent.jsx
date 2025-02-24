@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import { addVehicle } from "../services/VehicleService";
+import { addVehicle } from "../../services/VehicleService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Cropper from "react-cropper";
@@ -210,7 +210,7 @@ function AddVehicleModal() {
         }, "image/jpeg"); // Specify the image format
       }
     }
-  };  
+  };
 
   function validate() {
     let isValid = true;

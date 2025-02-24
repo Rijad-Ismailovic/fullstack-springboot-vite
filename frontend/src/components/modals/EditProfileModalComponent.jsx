@@ -9,12 +9,11 @@ import {
   authenticatePassword,
   getUserById,
   updateUserById,
-} from "../services/UserService";
+} from "../../services/UserService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 import Cropper from "react-cropper";
-
 
 function EditProfileModal() {
   const [show, setShow] = useState(false);
@@ -53,7 +52,7 @@ function EditProfileModal() {
     setFirstName("");
     setLastName("");
     setOldPassword("");
-    setNewPassword("")
+    setNewPassword("");
     setFile(null);
 
     setShow(false);
@@ -131,7 +130,6 @@ function EditProfileModal() {
         });
     }
   };
-
 
   function validate() {
     let valid = true;

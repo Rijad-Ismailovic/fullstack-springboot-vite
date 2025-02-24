@@ -45,3 +45,5 @@ export const addVehicle = (vehicle, userId) => {
     },
   });
 };
+
+export const deleteVehicleById = (id) => axios.delete(REST_API_BASE_URL + "/" + id)
