@@ -15,7 +15,7 @@ I used this project to learn Springboot and Vite.js
 - **Database**: MySQL for storing users and vehicles.
 - **Modern Frontend**: Built with Vite.js for a fast and responsive user experience.
 
-![Homepage](screenshots/homepage.png)
-![Listing](screenshots/listing.png)
-![Profile](screenshots/profile.png)
-![Add Vehicle Listing](screenshots/addVehicle.png)
+![Homepage](frontend/screenshots/homepage.png)
+![Listing](frontend/screenshots/listing.png)
+![Profile](frontend/screenshots/profile.png)
+![Add Vehicle Listing](frontend/screenshots/addVehicle.png)
