@@ -47,34 +47,43 @@ const RegistrationComponent = () => {
     validateForm().then((isValid) => {
       if (isValid) {
         const cropper = cropperRef.current?.cropper;
-        if (cropper) {
+        if (cropper && file) {
           const croppedCanvas = cropper.getCroppedCanvas();
-          croppedCanvas.toBlob((blob) => {
-            const file = new File([blob], "cropped-image.jpg", {
-              type: "image/jpeg",
-            }, "image/jpeg")
-            const registrationInput = {
-              firstName,
-              lastName,
-              email,
-              password,
-              file,
-            };
-            registration(registrationInput)
-              .then((response) => {
-                toast.success("Successfully registered.");
-                navigator("/login");
-              })
-              .catch((error) => {
-                console.error(
-                  "Registration failed:",
-                  error.response.data || error.message
-                );
+          if (croppedCanvas) {
+            croppedCanvas.toBlob((blob) => {
+              const file = new File([blob], "cropped-image.jpg", {
+                type: "image/jpeg",
               });
-          })
+
+              submitRegistration(file);
+            });
+          }
+        } else {
+          submitRegistration(null);
         }
       }
     });
+  }
+
+  function submitRegistration(file) {
+    const registrationInput = {
+      firstName,
+      lastName,
+      email,
+      password,
+      file, 
+    };
+    registration(registrationInput)
+      .then(() => {
+        toast.success("Successfully registered.");
+        navigator("/login");
+      })
+      .catch((error) => {
+        console.error(
+          "Registration failed:",
+          error.response?.data || error.message
+        );
+      });
   }
 
   async function validateForm() {

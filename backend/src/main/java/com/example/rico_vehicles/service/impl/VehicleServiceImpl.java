@@ -32,6 +32,37 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public VehicleDto updateVehicle(Long vehicleId, VehicleDto updatedVehicle) {
+        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle with given ID does not exist: " + vehicleId));
+        /*User user = userRepository.findById(updatedVehicle.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User with given ID does not exist: " + updatedVehicle.getUserId()));
+        vehicle.setUser(user);*/
+
+        vehicle.setTitle(updatedVehicle.getTitle());
+        vehicle.setManufacturer(updatedVehicle.getManufacturer());
+        vehicle.setModel(updatedVehicle.getModel());
+        vehicle.setYearOfManufacture(updatedVehicle.getYearOfManufacture());
+        vehicle.setEngineSize(updatedVehicle.getEngineSize());
+        vehicle.setFuelType(updatedVehicle.getFuelType());
+        vehicle.setKW(updatedVehicle.getKw());
+        vehicle.setDistanceTraveled(updatedVehicle.getDistanceTraveled());
+        vehicle.setCity(updatedVehicle.getCity());
+        vehicle.setPrice(updatedVehicle.getPrice());
+        vehicle.setDescription(updatedVehicle.getDescription());
+        if(updatedVehicle.getImagePath() != "Do not change image"){
+            vehicle.setImagePath(updatedVehicle.getImagePath());
+        }else{
+            vehicle.setImagePath(vehicle.getImagePath());
+        }
+
+        Vehicle updatedVehicleObj = vehicleRepository.save(vehicle);
+
+        return VehicleMapper.mapToVehicleDto(updatedVehicleObj);
+
+    }
+
+    @Override
     public VehicleDto getVehicleById(Long vehicleId) {
         Vehicle vehicle = vehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle with given ID does not exist: " + vehicleId));
@@ -44,31 +75,6 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicles.stream()
                 .map( (vehicle) -> VehicleMapper.mapToVehicleDto(vehicle))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public VehicleDto updateVehicle(Long vehicleId, VehicleDto updatedVehicle) {
-        Vehicle vehicle = vehicleRepository.findById(vehicleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle with given ID does not exist: " + vehicleId));
-        User user = userRepository.findById(updatedVehicle.getUserId())
-                        .orElseThrow(() -> new ResourceNotFoundException("User with given ID does not exist: " + updatedVehicle.getUserId()));
-
-        vehicle.setUser(user);
-        vehicle.setTitle(updatedVehicle.getTitle());
-        vehicle.setManufacturer(updatedVehicle.getManufacturer());
-        vehicle.setModel(updatedVehicle.getModel());
-        vehicle.setYearOfManufacture(updatedVehicle.getYearOfManufacture());
-        vehicle.setEngineSize(updatedVehicle.getEngineSize());
-        vehicle.setFuelType(updatedVehicle.getFuelType());
-        vehicle.setKW(updatedVehicle.getKw());
-        vehicle.setDistanceTraveled(updatedVehicle.getDistanceTraveled());
-        vehicle.setCity(updatedVehicle.getCity());
-        vehicle.setPrice(updatedVehicle.getPrice());
-
-        Vehicle updatedVehicleObj = vehicleRepository.save(vehicle);
-
-        return VehicleMapper.mapToVehicleDto(updatedVehicleObj);
-
     }
 
     @Override

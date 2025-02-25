@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getVehiclesByUserId } from "../services/VehicleService";
 import AddVehicleModal from "./modals/AddVehicleModalComponent";
 import DeleteVehicleModalComponent from "./modals/DeleteVehicleModalComponent";
+import EditVehicleModalComponent from "./modals/EditVehicleModalComponent";
+
 
 const ProfileBodyComponent = () => {
   const { id } = useParams();
@@ -99,12 +101,7 @@ const ProfileBodyComponent = () => {
                     </button>
                     {isMyProfile && (
                       <div className="text-center mt-2">
-                        <button
-                          className="btn btn-outline-primary mt-auto mx-1"
-                          onClick={() => enterVehicleListing(vehicle.id)}
-                        >
-                          Edit
-                        </button>
+                        <EditVehicleModalComponent vehicleId={vehicle.id} />
                         <DeleteVehicleModalComponent vehicleId={vehicle.id} />
                       </div>
                     )}

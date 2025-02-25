@@ -52,8 +52,6 @@ public class UserController {
             }else{
                 updatedUser.setImagePath("Do not change image");
             }
-            System.out.println(updatedUser.getImagePath());
-
             UserDto userDto = userService.updateUser(userId, updatedUser);
             return ResponseEntity.ok(userDto);
         } catch (Exception e) {

@@ -40,7 +40,29 @@
             }catch(Exception e){
                 return new ResponseEntity<>("Error creating vehicle: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        }
 
+        @PutMapping("{id}")
+        public ResponseEntity<?> updatedVehicle(
+                @PathVariable("id") Long vehicleId,
+                @RequestPart("vehicleDto") VehicleDto updatedVehicle,
+                @RequestPart(value = "imageFile", required = false) MultipartFile image){
+            try{
+                if(image != null){
+                    String imagePath = FileService.uploadFile(image, "uploads/thumbnails/");
+                    updatedVehicle.setImagePath(imagePath);
+                }else{
+                    updatedVehicle.setImagePath("Do not change image");
+                }
+
+                VehicleDto vehicleDto = vehicleService.updateVehicle(vehicleId, updatedVehicle);
+                return ResponseEntity.ok(vehicleDto);
+            } catch(Exception e){
+                return new ResponseEntity<>("Error updating vehicle: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            //VehicleDto vehicleDto = vehicleService.updateVehicle(vehicleId, updatedVehicle);
+            //return ResponseEntity.ok(vehicleDto);
         }
 
         @GetMapping("{id}")
@@ -53,12 +75,6 @@
         public ResponseEntity<List<VehicleDto>> getAllVehicles(){
             List<VehicleDto> vehicles = vehicleService.getAllVehicles();
             return ResponseEntity.ok(vehicles);
-        }
-
-        @PutMapping("{id}")
-        public ResponseEntity<VehicleDto> updatedVehicle(@PathVariable("id") Long vehicleId, @RequestBody VehicleDto updatedVehicle){
-            VehicleDto vehicleDto = vehicleService.updateVehicle(vehicleId, updatedVehicle);
-            return ResponseEntity.ok(vehicleDto);
         }
 
         @DeleteMapping("{id}")

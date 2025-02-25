@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate, useLocation } from "react-router-dom"
-import toast, { Toaster } from 'react-hot-toast';
 import { getUserById } from "../services/UserService";
 
 
@@ -42,7 +41,9 @@ const NavbarComponent = () =>  {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
             <li className="nav-item">
               <a
-                className="nav-link active"
+                className={`nav-link ${
+                  useLocation().pathname == "/" ? "active" : ""
+                }`}
                 aria-current="page"
                 href="#!"
                 onClick={() => {
@@ -54,7 +55,9 @@ const NavbarComponent = () =>  {
             </li>
             <li className="nav-item">
               <button
-                className="nav-link"
+                className={`nav-link ${
+                  useLocation().pathname.startsWith("/profile") ? "active" : ""
+                }`}
                 onClick={() => {
                   if (localStorage.getItem("userId") != null) {
                     navigator(`/profile/${localStorage.getItem("userId")}`);
@@ -67,7 +70,13 @@ const NavbarComponent = () =>  {
               </button>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#!">
+              <a
+                className={`nav-link ${
+                  useLocation().pathname == "/admin" ? "active" : ""
+                }`}
+                href="#!"
+                onClick={() => navigator("/admin")}
+              >
                 Admin
               </a>
             </li>
