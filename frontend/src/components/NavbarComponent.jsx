@@ -21,10 +21,10 @@ const NavbarComponent = () =>  {
   }, [userId])
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container px-4 px-lg-5">
         <a className="navbar-brand" href="#!" onClick={() => navigator("/")}>
-          RIČO VEHICLES
+          <span className="fw-bold">RIČO VEHICLES</span>
         </a>
         <button
           className="navbar-toggler"
@@ -69,21 +69,10 @@ const NavbarComponent = () =>  {
                 Profile
               </button>
             </li>
-            <li className="nav-item">
-              <a
-                className={`nav-link ${
-                  useLocation().pathname == "/admin" ? "active" : ""
-                }`}
-                href="#!"
-                onClick={() => navigator("/admin")}
-              >
-                Admin
-              </a>
-            </li>
           </ul>
           <form className="d-flex">
             <button
-              className="btn btn-outline-dark"
+              className="btn btn-outline-light"
               type="submit"
               onClick={() => {
                 if (localStorage.getItem("userId") == null) {

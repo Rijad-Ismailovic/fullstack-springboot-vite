@@ -60,9 +60,6 @@
             } catch(Exception e){
                 return new ResponseEntity<>("Error updating vehicle: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
-            //VehicleDto vehicleDto = vehicleService.updateVehicle(vehicleId, updatedVehicle);
-            //return ResponseEntity.ok(vehicleDto);
         }
 
         @GetMapping("{id}")

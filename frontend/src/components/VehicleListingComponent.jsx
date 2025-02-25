@@ -58,8 +58,8 @@ const VehicleListingComponent = () => {
   }, [userId]);
 
   return (
-    <section className="py-5">
-      <div className="container my-2">
+    <section className="py-5 mt-5">
+      <div className="container my-2 min-vh-100">
         <div className="row gx-4 gx-lg-5 align-items-center">
           <div className="col-md-6">
             <img

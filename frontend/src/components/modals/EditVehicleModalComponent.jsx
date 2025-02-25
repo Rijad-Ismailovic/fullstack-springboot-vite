@@ -326,7 +326,7 @@ function EditVehicleModal({ vehicleId }) {
   return (
     <>
       <button
-        className="btn btn-outline-primary mt-auto mx-1"
+        className="btn btn-outline-info mt-auto mx-1"
         onClick={handleShow}
       >
         Edit

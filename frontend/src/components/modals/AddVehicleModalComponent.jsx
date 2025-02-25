@@ -207,7 +207,7 @@ function AddVehicleModal() {
               console.log(error);
               toast.error("Failed to add listing.");
             });
-        }, "image/jpeg"); // Specify the image format
+        }, "image/jpeg"); 
       }
     }
   };

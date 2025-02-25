@@ -29,7 +29,7 @@ const ProfileHeaderComponent = () => {
   }, [id]);
 
   return (
-    <header className="bg-dark py-1">
+    <header className="bg-primary py-1">
       <div className="text-center my-5">
         <img
           className="img-fluid rounded-circle mb-4"
