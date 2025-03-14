@@ -68,3 +68,7 @@ export const updateUserById = (id, editInput) => {
     },
   });
 };
+
+export const getUsers = () => axios.get(REST_API_BASE_URL)
+
+export const deleteUserById = (id) => axios.delete(REST_API_BASE_URL + "/" + id)

@@ -1,24 +1,22 @@
-import React, { useState, useEffect} from "react";
-import { useNavigate, useLocation } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getUserById } from "../services/UserService";
+import { toast } from "react-hot-toast";
 
-
-const NavbarComponent = () =>  {
-
-  const navigator = useNavigate()
+const NavbarComponent = () => {
+  const navigator = useNavigate();
   const location = useLocation();
 
-  const [profilePicture, setProfilePicture] = useState("")
-    const userId = localStorage.getItem("userId");
-
+  const [profilePicture, setProfilePicture] = useState("");
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (userId) {
       getUserById(userId).then((response) => {
         setProfilePicture(response.data.imagePath);
-      })
+      });
     }
-  }, [userId])
+  }, [userId]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -67,6 +65,25 @@ const NavbarComponent = () =>  {
                 }}
               >
                 Profile
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${
+                  useLocation().pathname.startsWith("/admin") ? "active" : ""
+                }`}
+                onClick={() => {
+                  if (
+                    localStorage.getItem("userId") == null ||
+                    localStorage.getItem("userId") != 702
+                  ) {
+                    toast.error("Not authorized");
+                  } else{
+                    navigator("/admin");
+                  }
+                }}
+              >
+                Admin
               </button>
             </li>
           </ul>

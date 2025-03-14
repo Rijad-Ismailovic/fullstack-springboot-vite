@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import RegistrationComponent from "./components/RegistrationComponent";
 import ProfileBodyComponent from "./components/ProfileBodyComponent";
 import "cropperjs/dist/cropper.css";
+import AdminComponent from "./components/AdminComponent";
 
 function App() {
   return (
@@ -56,6 +57,11 @@ function App() {
           <Route
             path="/registration"
             element={<RegistrationComponent></RegistrationComponent>}
+          ></Route>
+
+          <Route
+            path="/admin"
+            element={<AdminComponent></AdminComponent>}
           ></Route>
         </Routes>
         <FooterComponent></FooterComponent>
